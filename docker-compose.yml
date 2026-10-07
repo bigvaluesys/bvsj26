@@ -1,0 +1,79 @@
+version: '3.8'
+services:
+        postgres:
+                build: postgres/
+                image: ${PG_IMAGE_NAME}
+                container_name: ${PG_CONTAINER_NAME}
+                environment:
+                        POSTGRES_DB: ${POSTGRES_DB}
+                        POSTGRES_USER: ${POSTGRES_USER}
+                        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+                        PGDATA: ${PGDATA}
+                volumes:
+                        - postgres:/var/lib/postgresql
+                ports:
+                        - ${PG_PORT}
+                restart: unless-stopped
+
+        pgadmin4:
+                build: pgadmin4/
+                image: ${PGADMIN_IMAGE_NAME}
+                container_name: ${PGADMIN_CONTAINER_NAME}
+                environment:
+                        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+                        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+                volumes:
+                        - pgadmin4:/var/lib/pgadmin
+                ports:
+                        - ${PGADMIN_PORT}
+                restart: unless-stopped
+
+        sonarqube:
+                build: sonarqube/
+                image: ${SONARQUBE_IMAGE_NAME}
+                container_name: ${SONARQUBE_CONTAINER_NAME}
+                environment:
+                        - SONARQUBE_USERNAME=${SONARQUBE_USERNAME}
+                        - SONARQUBE_PASSWORD=${SONARQUBE_PASSWORD}
+                
+                volumes:
+                        - sonarqube_data:/opt/sonarqube/data
+                        - sonarqube_logs:/opt/sonarqube/logs
+                        - sonarqube_extensions:/opt/sonarqube/extensions
+                ports:
+                        - ${SONARQUBE_PORT}
+                restart: unless-stopped
+
+volumes:
+        postgres:
+                driver: local
+                driver_opts:
+                        type: 'none'
+                        o: 'bind'
+                        device: /data/postgres
+        pgadmin4:
+                driver: local
+                driver_opts:
+                        type: 'none'
+                        o: 'bind'
+                        device: /data/pgadmin4
+
+        sonarqube_data:
+                driver: local
+                driver_opts:
+                        type: 'none'
+                        o: 'bind'
+                        device: /data/sonarqube_data
+        sonarqube_logs:
+                driver: local
+                driver_opts:
+                        type: 'none'
+                        o: 'bind'
+                        device: /data/sonarqube_logs
+        sonarqube_extensions:
+                driver: local
+                driver_opts:
+                        type: 'none'
+                        o: 'bind'
+                        device: /data/sonarqube_extensions
+        
