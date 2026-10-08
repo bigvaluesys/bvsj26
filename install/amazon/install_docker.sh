@@ -72,11 +72,21 @@ fi
 # ─── Step 7: Verify Installation ─────────────
 echo -e "\n${YELLOW}[7/7] Verifying installation...${NC}"
 docker --version
-docker compose version
 
 # ─── Test Docker ──────────────────────────────
 echo -e "\n${YELLOW}Testing Docker with hello-world...${NC}"
 docker run hello-world
+
+
+echo -e "${GREEN}========================================${NC}"
+echo -e "${GREEN}  Docker Compose Installer     ${NC}"
+echo -e "${GREEN}========================================${NC}"
+
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.32.4/docker-compose-linux-$(uname -m) -o /usr/local/bin/docker-compose \
+&& sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose version
+
 
 echo -e "\n${GREEN}========================================${NC}"
 echo -e "${GREEN}  ✅ Installation Complete!              ${NC}"
